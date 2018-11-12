@@ -14,15 +14,18 @@ class ETCDJTracker(JTracker):
         self._server = server
         self._user = user
         self._queue = queue
-        self._jobs = self._load_jobs()
+        self._load_jobs()
         return
 
     def get_jobs(self, state=None):
         return self._jobs
 
     def _load_jobs(self):
+        self._jobs = {}
         url = self._server+"/api/jt-jess/v0.1/jobs/owner/"+self._user+"/queue/"+self._queue
-        return requests.get(url).json()
+        for job in requests.get(url).json():
+            self._jobs[job.get("id")] = job
+        return
 
     def get_job_ids(self, state=None):
         ids = []
@@ -38,7 +41,4 @@ class ETCDJTracker(JTracker):
         return json.loads(self.get_job(id).get('job_file'))
 
     def get_job(self, id):
-        for job in self._jobs:
-            if job.get('id') == id:
-                return job
-        raise ValueError("ID not found: "+id)
+        return self._jobs[id]
