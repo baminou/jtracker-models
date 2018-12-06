@@ -21,3 +21,7 @@ class JTracker:
     @abc.abstractmethod
     def get_jobs(self, state=None):
         raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_stats(self, job):
+        raise NotImplementedError

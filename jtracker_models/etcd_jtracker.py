@@ -5,12 +5,12 @@ from .jtracker import JTracker
 import requests
 import json
 import logging
+import datetime
 
 
 class ETCDJTracker(JTracker):
 
     def __init__(self, server, user, queue):
-        super().__init__()
         self._server = server
         self._user = user
         self._queue = queue
@@ -42,3 +42,27 @@ class ETCDJTracker(JTracker):
 
     def get_job(self, id):
         return self._jobs[id]
+
+    def get_start_times(self, tasks_dict):
+        start_times = []
+        for _key in tasks_dict:
+            start_times.append(json.loads(tasks_dict[_key].get('task_file')).get('output')[0].get('_jt_').get('wall_time').get('start'))
+        return start_times
+
+    def get_completion_times(self, tasks_dict):
+        stop_times = []
+        for _key in tasks_dict:
+            stop_times.append(json.loads(tasks_dict[_key].get('task_file')).get('output')[0].get('_jt_').get('wall_time').get('end'))
+        return stop_times
+
+    def get_stats(self, job):
+        start_date_sec = min(self.get_start_times(job.get('tasks')))
+        completion_date_sec = max(self.get_completion_times(job.get('tasks')))
+        return {
+            'start_date': datetime.datetime.fromtimestamp(start_date_sec).strftime('%Y-%m-%d'),
+            'start_time': datetime.datetime.fromtimestamp(start_date_sec).strftime('%H:%M:%S'),
+            'completion_date': datetime.datetime.fromtimestamp(completion_date_sec).strftime('%Y-%m-%d'),
+            'completion_time': datetime.datetime.fromtimestamp(completion_date_sec).strftime('%H:%M:%S'),
+            'duration': completion_date_sec - start_date_sec
+        }
+
