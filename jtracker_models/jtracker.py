@@ -23,7 +23,7 @@ class JTracker:
         raise NotImplementedError
 
     @staticmethod
-    def to_json_list(jtrackers, state=None):
+    def combine(jtrackers, state=None):
         jobs = []
         for jtracker in jtrackers:
             jobs = jobs + jtracker.get_jobs(state)
