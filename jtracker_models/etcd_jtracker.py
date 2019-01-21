@@ -18,7 +18,14 @@ class ETCDJTracker(JTracker):
         return
 
     def get_jobs(self, state=None):
-        return self._jobs
+        jobs = []
+        for id in self._jobs:
+            if not state == None:
+                if self._jobs[id].get('state') == state:
+                    jobs.append(self._jobs[id])
+            else:
+                jobs.append(self._jobs[id])
+        return jobs
 
     def _load_jobs(self):
         self._jobs = {}

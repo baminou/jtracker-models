@@ -37,12 +37,12 @@ class GithubJTracker(JTracker):
                 return state
 
     def get_job_ids(self, state=None):
-        if state == None:
-            return self._jobs.keys()
-        return [id for id in self._jobs.keys() if "job."+state in id]
+        if state == None: return self._jobs.keys()
+        return [id for id in list(self._jobs.keys()) if "job_state."+state in id]
 
     def get_jobs(self, state=None):
-        return self._jobs
+        if state == None: return self._jobs
+        return [self._jobs[id] for id in list(self._jobs.keys()) if "job_state." + state in id]
 
     def get_job(self, id):
         return self._jobs[id]
