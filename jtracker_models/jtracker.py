@@ -21,3 +21,10 @@ class JTracker:
     @abc.abstractmethod
     def get_jobs(self, state=None):
         raise NotImplementedError
+
+    @staticmethod
+    def to_json_list(jtrackers, state=None):
+        jobs = []
+        for jtracker in jtrackers:
+            jobs = jobs + jtracker.get_jobs(state)
+        return jobs
