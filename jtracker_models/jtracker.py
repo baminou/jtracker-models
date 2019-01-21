@@ -24,7 +24,11 @@ class JTracker:
 
     @staticmethod
     def combine(jtrackers, state=None):
-        jobs = []
+        def __merge(dict1, dict2):
+            res = {**dict1, **dict2}
+            return res
+
+        jobs = {}
         for jtracker in jtrackers:
-            jobs = jobs + jtracker.get_jobs(state)
+            jobs =  __merge(jobs,jtracker.get_jobs(state))
         return jobs
