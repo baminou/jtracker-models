@@ -30,6 +30,6 @@ class JTracker:
 
         jobs = {}
         for jtracker in jtrackers:
-            for job_id in jtracker.get_jobs(state):
+            for job_id in jtracker.get_job_ids(state):
                 jobs[job_id] = jtracker.get_job_data(job_id)
         return jobs
